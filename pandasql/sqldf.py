@@ -7,6 +7,7 @@ from warnings import catch_warnings, filterwarnings
 from sqlalchemy.exc import DatabaseError, ResourceClosedError
 from sqlalchemy.pool import NullPool
 from sqlalchemy.event import listen
+from .datatypes import register_pandas_dtype_with_sqlite
 
 __all__ = ['PandaSQL', 'PandaSQLException', 'sqldf']
 
@@ -26,6 +27,7 @@ class PandaSQL:
 
         if self.engine.name == 'sqlite':
             listen(self.engine, 'connect', self._set_text_factory)
+            register_pandas_dtype_with_sqlite()
 
         if self.engine.name not in ('sqlite', 'postgresql'):
             raise PandaSQLException('Currently only sqlite and postgresql are supported.')
