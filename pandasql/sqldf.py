@@ -33,7 +33,7 @@ class PandaSQL:
         self.persist = persist
         self.loaded_tables = set()
         if self.persist:
-            self._conn = self.engine.connect()
+            self._conn = self.engine.raw_connection()
             self._init_connection(self._conn)
 
     def __call__(self, query, env=None):
@@ -79,7 +79,7 @@ class PandaSQL:
             # no cleanup needed
         else:
             # create the connection
-            conn = self.engine.connect()
+            conn = self.engine.raw_connection()
             self._init_connection(conn)
             try:
                 yield conn
